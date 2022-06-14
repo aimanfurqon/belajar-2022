@@ -1,6 +1,6 @@
 package com.example.storyfirst.view.signup
 
-import android.content.Context
+//import androidx.datastore.preferences.preferencesDataStore
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,9 +8,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-//import androidx.datastore.preferences.preferencesDataStore
 import com.example.storyfirst.databinding.ActivitySignupBinding
 import com.example.storyfirst.helper.Constant
 import com.example.storyfirst.helper.PreferencesHelper

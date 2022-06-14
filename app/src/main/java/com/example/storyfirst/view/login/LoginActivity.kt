@@ -1,6 +1,5 @@
 package com.example.storyfirst.view.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,24 +11,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
-//import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.lifecycleScope
-//import androidx.datastore.preferences.preferencesDataStore
 import com.example.storyfirst.databinding.ActivityLoginBinding
 import com.example.storyfirst.helper.Constant
 import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.model.LoginResponse
-//import com.example.storyfirst.model.LoginResult
 import com.example.storyfirst.server.ApiConfig
 import com.example.storyfirst.view.main.MainActivity
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class LoginActivity : AppCompatActivity() {
 
@@ -96,8 +90,6 @@ class LoginActivity : AppCompatActivity() {
                                 sharedPref.put(Constant.PREF_EMAIL, email)
                                 sharedPref.put(Constant.PREF_PASSWORD, password)
                                 sharedPref.put(Constant.PREF_IS_LOGIN, true)
-//                                sharedPref.put(Constant.PREF_TOKEN, tokenId)
-                                //   sharedPref.put(Constant.PREF_TOKEN, token)
 
                                 lifecycleScope.launch {
                                  save(

@@ -1,6 +1,6 @@
 package com.example.storyfirst.view.main
 
-import android.content.Context
+//import androidx.datastore.preferences.preferencesDataStore
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,7 +12,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.preferencesKey
 import androidx.datastore.preferences.createDataStore
-//import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyfirst.adapter.StoriesAdapter
 import com.example.storyfirst.databinding.ActivityMainBinding
