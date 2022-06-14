@@ -11,16 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.example.storyfirst.databinding.ActivitySignupBinding
 import com.example.storyfirst.helper.Constant
 import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.model.RegisterResponse
-import com.example.storyfirst.model.UserPreference
 import com.example.storyfirst.server.ApiConfig
-import com.example.storyfirst.view.ViewModelFactory
 import com.example.storyfirst.view.main.MainActivity
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +25,6 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private lateinit var signupViewModel: SignupViewModel
     lateinit var sharedPref: PreferencesHelper
 
     companion object {

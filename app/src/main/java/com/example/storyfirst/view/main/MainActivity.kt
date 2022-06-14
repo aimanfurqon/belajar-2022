@@ -11,15 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.storyfirst.R
 import com.example.storyfirst.adapter.StoriesAdapter
 import com.example.storyfirst.databinding.ActivityMainBinding
+import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.model.GetStoriesResponse
-import com.example.storyfirst.model.UserPreference
 import com.example.storyfirst.server.ApiConfig
-import com.example.storyfirst.view.ViewModelFactory
 import com.example.storyfirst.view.welcome.WelcomeActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +25,7 @@ import retrofit2.Response
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainViewModel: MainViewModel
+    lateinit var sharedPref: PreferencesHelper
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: StoriesAdapter
 
@@ -37,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sharedPref = PreferencesHelper(this)
+
         setupView()
-//        setupViewModel()
         setupAction()
 
         adapter = StoriesAdapter(arrayListOf(), this@MainActivity)
@@ -61,25 +59,9 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-//    private fun setupViewModel() {
-//        mainViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(UserPreference.getInstance(dataStore))
-//        )[MainViewModel::class.java]
-//
-//        mainViewModel.getUser().observe(this, { user ->
-//            if (user.isLogin){
-//                binding.nameTextView.text = getString(R.string.greeting, user.name)
-//            } else {
-//                startActivity(Intent(this, WelcomeActivity::class.java))
-//                finish()
-//            }
-//        })
-//    }
-
     private fun setupAction() {
         binding.logoutButton.setOnClickListener {
-            mainViewModel.logout()
+            sharedPref.clear()
             startActivity(Intent(this,WelcomeActivity::class.java))
         }
     }
