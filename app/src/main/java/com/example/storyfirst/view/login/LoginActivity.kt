@@ -10,25 +10,34 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.preferencesKey
+//import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.createDataStore
+import androidx.lifecycle.lifecycleScope
+//import androidx.datastore.preferences.preferencesDataStore
 import com.example.storyfirst.databinding.ActivityLoginBinding
 import com.example.storyfirst.helper.Constant
 import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.model.LoginResponse
-import com.example.storyfirst.model.LoginResult
+//import com.example.storyfirst.model.LoginResult
 import com.example.storyfirst.server.ApiConfig
 import com.example.storyfirst.view.main.MainActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var tokenId: LoginResult
+    private lateinit var tokenId: LoginResponse.LoginResult
     lateinit var sharedPref: PreferencesHelper
+
+    private lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sharedPref = PreferencesHelper(this)
+        dataStore = createDataStore(name = "settings")
 
         setupView()
         setupAction()
@@ -54,10 +64,21 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    private suspend fun save(key: String, value: String) {
+        val dataStoreKey = preferencesKey<String>(key)
+        dataStore.edit { settings ->
+            settings[dataStoreKey] = value
+
+        }
+    }
+
+
+
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
+            val tokenId = tokenId.token
             when {
                 email.isEmpty() -> {
                     binding.emailEditTextLayout.error = "Masukkan email"
@@ -75,7 +96,15 @@ class LoginActivity : AppCompatActivity() {
                                 sharedPref.put(Constant.PREF_EMAIL, email)
                                 sharedPref.put(Constant.PREF_PASSWORD, password)
                                 sharedPref.put(Constant.PREF_IS_LOGIN, true)
-                             //   sharedPref.put(Constant.PREF_TOKEN, token)
+//                                sharedPref.put(Constant.PREF_TOKEN, tokenId)
+                                //   sharedPref.put(Constant.PREF_TOKEN, token)
+
+                                lifecycleScope.launch {
+                                 save(
+                                     Constant.PREF_TOKEN, tokenId
+                                 )
+                                }
+
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)

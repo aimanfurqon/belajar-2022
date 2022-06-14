@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+//import androidx.datastore.preferences.preferencesDataStore
 import com.example.storyfirst.databinding.ActivitySignupBinding
 import com.example.storyfirst.helper.Constant
 import com.example.storyfirst.helper.PreferencesHelper
@@ -21,7 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding

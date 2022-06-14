@@ -10,24 +10,30 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.createDataStore
+//import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyfirst.adapter.StoriesAdapter
 import com.example.storyfirst.databinding.ActivityMainBinding
 import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.model.GetStoriesResponse
 import com.example.storyfirst.server.ApiConfig
+import com.example.storyfirst.view.camera.AddStoryActivity
 import com.example.storyfirst.view.welcome.WelcomeActivity
+import kotlinx.coroutines.flow.first
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
     lateinit var sharedPref: PreferencesHelper
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: StoriesAdapter
+
+    private lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +44,30 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+        dataStore = createDataStore(name = "settings")
 
         adapter = StoriesAdapter(arrayListOf(), this@MainActivity)
         binding.rvStories.layoutManager = LinearLayoutManager(this)
         binding.rvStories.setHasFixedSize(true)
         binding.rvStories.adapter = adapter
+        setFloatingActionButton()
         getStudents()
+
     }
+
+    private fun setFloatingActionButton() {
+        binding.fabAdd.setOnClickListener {
+            startActivity(Intent(this, AddStoryActivity::class.java))
+        }
+    }
+
+    private suspend fun read(key: String):String? {
+        val dataStoreKey = preferencesKey<String>(key)
+        val preferences = dataStore.data.first()
+        return preferences[dataStoreKey]
+    }
+
+
 
     private fun setupView() {
         @Suppress("DEPRECATION")
@@ -62,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.logoutButton.setOnClickListener {
             sharedPref.clear()
-            startActivity(Intent(this,WelcomeActivity::class.java))
+            startActivity(Intent(this, WelcomeActivity::class.java))
         }
     }
 

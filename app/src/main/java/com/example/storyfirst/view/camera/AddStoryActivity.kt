@@ -15,6 +15,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.storyfirst.databinding.ActivityAddStoryBinding
+import com.example.storyfirst.helper.Constant
+import com.example.storyfirst.helper.PreferencesHelper
 import com.example.storyfirst.server.ApiConfig
 import com.example.storyfirst.view.main.MainActivity
 import okhttp3.MediaType.Companion.toMediaType
@@ -32,6 +34,7 @@ class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var currentPhotoPath: String
+    lateinit var sharedPref: PreferencesHelper
 
     private var getFile: File? = null
 
@@ -68,6 +71,8 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedPref = PreferencesHelper(this)
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -166,8 +171,9 @@ class AddStoryActivity : AppCompatActivity() {
                 file.name,
                 requestImageFile
             )
+            val token = sharedPref.getString(Constant.PREF_TOKEN)
 
-           val service = ApiConfig.instanceRetrofit.uploadImage(imageMultipart, description)
+           val service = ApiConfig.instanceRetrofit.uploadImage("Bearer ${token}",imageMultipart, description)
 
             service.enqueue(object : Callback<FileUploadResponse> {
                 override fun onResponse(

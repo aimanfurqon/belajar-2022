@@ -3,7 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.storyfirst">
 
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -16,14 +23,16 @@
         android:theme="@style/Theme.StoryFirst"
         tools:targetApi="31">
         <activity
-            android:name=".DetailUserActivity"
+            android:name=".view.camera.AddStoryActivity"
             android:exported="false" />
         <activity
-            android:name=".view.maintwo.MainActivityTwo"
+            android:name=".view.detailUser.DetailUserActivity"
             android:exported="false" />
         <activity
             android:name=".view.main.MainActivity"
             android:exported="false" />
+        <activity android:name=".view.camera.CameraActivity"
+            android:exported="false"/>
         <activity
             android:name=".view.signup.SignupActivity"
             android:exported="false" />
